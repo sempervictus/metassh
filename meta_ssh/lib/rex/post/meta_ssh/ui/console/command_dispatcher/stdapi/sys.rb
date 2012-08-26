@@ -32,6 +32,7 @@ class Console::CommandDispatcher::Stdapi::Sys
 		{
 			"execute"  => "Execute a command",
 			"shell"    => "Drop into a system command shell",
+			"tty_shell" =>"Drop into system shell with python tty"
 		}
 	end
 
@@ -109,6 +110,10 @@ class Console::CommandDispatcher::Stdapi::Sys
 			path = "/bin/bash -i"
 			cmd_execute("-f", path, "-c", "-i")
 	end
+	def cmd_tty_shell(*args)
+            path = "python -c \"import pty; pty.spawn('/bin/sh')\""
+            cmd_execute("-f", path, "-c", "-i")
+        end
 
 end
 
