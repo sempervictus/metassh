@@ -5,7 +5,7 @@
 
 # top level constant ?!
 
-ARCH_SSH = "ssh" #Tried as class variable without success
+#ARCH_SSH = "ssh" #Tried as class variable without success
 
 module Msf
 
@@ -121,10 +121,11 @@ class Plugin::MetaSSH < Msf::Plugin
 		$:.unshift(File.join(File.dirname(__FILE__),"meta_ssh","lib"))
 
 		# load our modules
-
-		framework.modules.add_module_path(File.join(File.dirname(__FILE__),"meta_ssh","modules")).each do |m|
-			print_good("Added #{m.last} #{m.first.capitalize} modules for metaSSH")
-		end
+		Rex::ThreadFactory.spawn("#{name} Module Loader", true) {
+			framework.modules.add_module_path(File.join(File.dirname(__FILE__),"meta_ssh","modules")).each do |m|
+				print_good("Added #{m.last} #{m.first.capitalize} modules for metaSSH")
+			end
+		}
 
 		# load the dispatcher
 
@@ -139,7 +140,7 @@ class Plugin::MetaSSH < Msf::Plugin
 
   def name
   	"metaSSH"
-	end
+  end
 
 
 end

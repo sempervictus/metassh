@@ -316,7 +316,7 @@ class Console::CommandDispatcher::Stdapi::Fs
 	#
 	def cmd_ls(*args)
 		path = args[0] || client.fs.dir.getwd
-		tbl  = Rex::Ui::Text::Table.new(
+		tbl  = Rex::Text::Table.new(
 			'Header'  => "Listing: #{path}",
 			'Columns' =>
 				[

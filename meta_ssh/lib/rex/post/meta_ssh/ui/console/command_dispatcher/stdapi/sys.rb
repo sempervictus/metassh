@@ -32,7 +32,8 @@ class Console::CommandDispatcher::Stdapi::Sys
 		{
 			"execute"  => "Execute a command",
 			"shell"    => "Drop into a system command shell",
-			"tty_shell" =>"Drop into system shell with python tty"
+			"tty_shell" => "Drop into system shell with python tty",
+			"raw_shell" => "Drop into system shell without /bin/sh"
 		}
 	end
 
@@ -89,8 +90,8 @@ class Console::CommandDispatcher::Stdapi::Sys
 					session = val.to_i
 			end
 		}
-	  if(channelized)	
-      channel=Channel.new(client) {|c| c.channel.exec(cmd_exec)}
+	  if(channelized)
+      channel=Rex::Post::MetaSSH::Channel.new(client) {|c| c.channel.exec(cmd_exec)}
       channel.type="exec"
       channel.info=cmd_exec
       print_line("Channel #{channel.cid} created.") if channel
@@ -107,14 +108,20 @@ class Console::CommandDispatcher::Stdapi::Sys
 	# Drop into a system shell as specified by %COMSPEC% or
 	# as appropriate for the host.
 	def cmd_shell(*args)
-			path = "/bin/bash -i"
+			path = "/bin/sh -i"
 			cmd_execute("-f", path, "-c", "-i")
 	end
+
+	def cmd_raw_shell(*args)
+		cmd_execute("-i")
+	end
+
 	def cmd_tty_shell(*args)
             path = "python -c \"import pty; pty.spawn('/bin/sh')\""
             cmd_execute("-f", path, "-c", "-i")
         end
 
+	alias :cmd_exec :cmd_execute
 end
 
 end

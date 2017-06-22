@@ -133,7 +133,7 @@ class Console::CommandDispatcher::Core
 
 		case mode
 		when :list
-			tbl = Rex::Ui::Text::Table.new(
+			tbl = Rex::Text::Table.new(
 				'Indent'  => 4,
 				'Columns' =>
 					[
